@@ -1,0 +1,77 @@
+##Understanding DFS for Maze Solving
+
+Depth-First Search (DFS) is a graph traversal algorithm that explores as deep as possible along a branch before backtracking. In the context of maze solving, this means we start from a starting point and move in a specific direction until we reach a dead-end or the goal. If we hit a dead-end, we backtrack to the previous point and try another direction.
+
+##Implementation in Python
+
+Here's a Python implementation of DFS for maze solving:
+Python
+
+def dfs(maze, start, end):
+    """
+    Solves a maze using Depth-First Search.
+
+    Args:
+        maze: A 2D list representing the maze.
+        start: A tuple (row, col) representing the start position.
+        end: A tuple (row, col) representing the end position.
+
+    Returns:
+        A boolean indicating whether a path was found.
+    """
+
+    rows, cols = len(maze), len(maze[0])
+    visited = [[False] * cols for _ in range(rows)]
+
+    def dfs_util(row, col):
+        if row < 0 or row >= rows or col < 0 or col >= cols or maze[row][col] == 0 or visited[row][col]:
+            return False
+
+        visited[row][col] = True
+
+        if (row, col) == end:
+            return True
+
+        # Explore all four directions
+        if dfs_util(row - 1, col) or dfs_util(row + 1, col) or dfs_util(row, col - 1) or dfs_util(row, col + 1):
+            return True
+
+        return False
+
+    return dfs_util(start[0], start[1])
+
+# Example usage
+maze = [
+    [1, 0, 1, 1, 1],
+    [1, 1, 1, 0, 1],
+    [0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1]
+]
+
+start = (0, 0)
+end = (3, 4)
+
+if dfs(maze, start, end):
+    print("Path found")
+else:
+    print("Path not found")
+
+Use code with caution.
+
+##Explanation:
+
+    Maze Representation: The maze is represented as a 2D list. 1 indicates a free cell, and 0 indicates a wall.
+    Visited Matrix: A 2D boolean matrix visited is used to keep track of visited cells to avoid cycles.
+    DFS Utility Function:
+        Checks if the current cell is valid (within bounds, not a wall, and not visited).
+        Marks the current cell as visited.
+        If the current cell is the end, returns True.
+        Recursively explores all four directions (up, down, left, right).
+        If any of the recursive calls returns True, a path is found, so the current function also returns True.
+    Main Function: Calls the dfs_util function with the starting position and checks the returned value to determine if a path exists.
+
+##Key Points:
+
+    DFS can be implemented recursively or iteratively using a stack.
+    For more complex mazes, consider using backtracking to find the optimal path.
+    DFS can be inefficient for large mazes, so other algorithms like A* search might be more suitable.
